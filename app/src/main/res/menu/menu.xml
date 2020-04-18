@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item
+        android:id="@+id/action_shuffle"
+        android:icon="@drawable/shuffle"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="Shuffle"/>
+
+    <item
+        android:id="@+id/action_end"
+        android:orderInCategory="3"
+        android:showAsAction="always"
+        android:title="Close"/>
+</menu>
