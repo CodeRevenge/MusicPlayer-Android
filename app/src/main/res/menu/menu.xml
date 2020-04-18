@@ -8,12 +8,12 @@
         android:id="@+id/action_shuffle"
         android:icon="@drawable/shuffle"
         android:orderInCategory="2"
-        android:showAsAction="always"
-        android:title="Shuffle"/>
+        android:title="Shuffle"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_end"
         android:orderInCategory="3"
-        android:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="Close"/>
 </menu>
