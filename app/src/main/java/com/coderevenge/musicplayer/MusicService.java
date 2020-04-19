@@ -33,6 +33,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     private boolean shuffle = false;
 
+    private boolean repeat = false;
+
     private Random random;
 
     public void onCreate() {
@@ -48,6 +50,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void setShuffle() {
         if (shuffle) shuffle = false;
         else shuffle = true;
+    }
+
+    public void setRepeat() {
+        if (repeat) repeat = false;
+        else repeat = true;
+    }
+
+    public boolean isShuffle() {
+        return shuffle;
+    }
+
+    public boolean isRepeat() {
+        return repeat;
     }
 
     public void initMediaPlayer() {
@@ -100,6 +115,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         currentSongPosition = songPosition;
     }
 
+    public int getCurrentSongPosition() {
+        return currentSongPosition;
+    }
+
     public int getCurrentPosition() {
         return mediaPlayer.getCurrentPosition();
     }
@@ -132,6 +151,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void playNext() {
+        if (repeat) {
+            playSong();
+            return;
+        }
         if (shuffle) {
             int newSongPosition = currentSongPosition;
             while (newSongPosition == currentSongPosition) {
@@ -189,7 +212,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 .setSmallIcon(R.drawable.play)
                 .setTicker(songTitle)
                 .setOngoing(true)
-                .setContentTitle("Playing")
+                .setContentTitle("Now Playing")
                 .setContentText(songTitle);
         Notification notification = builder.build();
 

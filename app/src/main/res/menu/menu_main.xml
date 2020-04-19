@@ -4,15 +4,22 @@
 
     <item
         android:id="@+id/action_shuffle"
-        android:icon="@drawable/shuffle"
+        android:icon="@drawable/shuffle_off"
         android:orderInCategory="1"
-        app:showAsAction="always"
-        android:title="Shuffle" />
+        android:title="Shuffle"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_end"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         app:showAsAction="always"
         android:title="End" />
+
+    <item
+        android:id="@+id/action_repeat"
+        android:icon="@drawable/repeat_off"
+        android:orderInCategory="2"
+        android:title="Repeat"
+        app:showAsAction="always" />
 
 </menu>

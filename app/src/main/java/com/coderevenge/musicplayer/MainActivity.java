@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     private boolean musicBound = false;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
+    private View lastSongPicked;
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -79,24 +81,27 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     }
 
     private void setMusicController() {
-        musicController = new MusicController(this);
+        if (musicController == null) {
+            musicController = new MusicController(this);
 
-        musicController.setPrevNextListeners(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                playNext();
-            }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            musicController.setPrevNextListeners(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    playNext();
+                }
+            }, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                playPrev();
-            }
-        });
+                    playPrev();
+                }
+            });
 
-        musicController.setMediaPlayer(this);
-        musicController.setAnchorView(findViewById(R.id.song_list));
-        musicController.setEnabled(true);
+            musicController.setMediaPlayer(this);
+            musicController.setAnchorView(findViewById(R.id.principal));
+            musicController.setEnabled(true);
+
+        }
     }
 
     private void playNext() {
@@ -107,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         }
 
         musicController.show(0);
+
+        updatePlaySelection();
     }
 
     private void playPrev() {
@@ -117,6 +124,13 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         }
 
         musicController.show(0);
+        updatePlaySelection();
+    }
+
+    private void updatePlaySelection() {
+        lastSongPicked.setBackgroundColor(0x00FFFFFF);
+        lastSongPicked = songListView.getChildAt(musicService.getCurrentSongPosition());
+        lastSongPicked.setBackgroundColor(0xFF516D8F);
     }
 
     @Override
@@ -180,12 +194,20 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         switch (id) {
             case R.id.action_shuffle:
                 musicService.setShuffle();
+                if (musicService.isShuffle()) item.setIcon(R.drawable.shuffle_on);
+                else item.setIcon(R.drawable.shuffle_off);
                 break;
 
             case R.id.action_end:
                 stopService(playIntent);
                 musicService = null;
                 System.exit(0);
+                break;
+
+            case R.id.action_repeat:
+                musicService.setRepeat();
+                if (musicService.isRepeat()) item.setIcon(R.drawable.repeat_on);
+                else item.setIcon(R.drawable.repeat_off);
                 break;
         }
 
@@ -231,6 +253,13 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     public void songPicked(View view) {
         musicService.setCurrentSongPosition(Integer.parseInt(view.getTag().toString()));
         musicService.playSong();
+
+
+        if (lastSongPicked != null) {
+            lastSongPicked.setBackgroundColor(0x00FFFFFF);
+        }
+        view.setBackgroundColor(0xFF516D8F);
+        lastSongPicked = view;
 
         if (playbackPaused) {
             setMusicController();
